@@ -35,8 +35,8 @@ main (int argc, char **argv)
   int n = 100;
 	char *progname= argv[0];
 
-  points_t pts;
-  spline_t spl;
+  points_t pts;//tworzenie struktury z punktami
+  spline_t spl;//tworzenie struktury ze splajnami
 
   pts.n = 0;
   spl.n = 0;
