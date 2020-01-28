@@ -6,99 +6,40 @@
 #include <math.h>
 
 #include <float.h>
+#include <horner.h>
 
-
-long lag(double x, int n){
+double fi(int n,  double x)
+{
 	if(n==0)return 1;
-	if(n==1)return -1*x+1;
+	if(n==1) return (-1*x+1);
 	else{
-		(1/n)*((2*n-1+x)*lag(x, n-1)-n*lag(x, n-2));
+		return (1/n)*((2*n-1+x)*fi(x, n-1)-n*fi(x, n-2));
 	}
 }
 
-double fi(double a, double b, int n, int i, double x)
-{
-	return lag(x, n);
-}
-
 /* Pierwsza pochodna fi */
-double
-dfi(double a, double b, int n, int i, double x)
+double dfi(int n,  double x)
 {
-	double		h = (b - a) / (n - 1);
-	double		h3 = h * h * h;
-	int		hi         [5] = {i - 2, i - 1, i, i + 1, i + 2};
-	double		hx      [5];
-	int		j;
-
-	for (j = 0; j < 5; j++)
-		hx[j] = a + h * hi[j];
-
-	if ((x < hx[0]) || (x > hx[4]))
-		return 0;
-	else if (x >= hx[0] && x <= hx[1])
-		return 3 / h3 * (x - hx[0]) * (x - hx[0]);
-	else if (x > hx[1] && x <= hx[2])
-		return 1 / h3 * (3 * h * h + 6 * h * (x - hx[1]) - 9 * (x - hx[1]) * (x - hx[1]));
-	else if (x > hx[2] && x <= hx[3])
-		return 1 / h3 * (-3 * h * h - 6 * h * (hx[3] - x) + 9 * (hx[3] - x) * (hx[3] - x));
-	else			/* if (x > hx[3]) && (x <= hx[4]) */
-		return -3 / h3 * (hx[4] - x) * (hx[4] - x);
+	if(n==1) return -1;
+	else{
+		return horner(n, x, 1);
+	}
 }
 
 /* Druga pochodna fi */
-double
-d2fi(double a, double b, int n, int i, double x)
+double d2fi(int n, double x)
 {
-	double		h = (b - a) / (n - 1);
-	double		h3 = h * h * h;
-	int		hi         [5] = {i - 2, i - 1, i, i + 1, i + 2};
-	double		hx      [5];
-	int		j;
-
-	for (j = 0; j < 5; j++)
-		hx[j] = a + h * hi[j];
-
-	if ((x < hx[0]) || (x > hx[4]))
-		return 0;
-	else if (x >= hx[0] && x <= hx[1])
-		return 6 / h3 * (x - hx[0]);
-	else if (x > hx[1] && x <= hx[2])
-		return 1 / h3 * (6 * h - 18 * (x - hx[1]));
-	else if (x > hx[2] && x <= hx[3])
-		return 1 / h3 * (6 * h  -18 * (hx[3] - x));
-	else			/* if (x > hx[3]) && (x <= hx[4]) */
-		return 6 / h3 * (hx[4] - x);
+	return horner(n, x, 2);
 }
 
 /* Trzecia pochodna fi */
-double
-d3fi(double a, double b, int n, int i, double x)
+double d3fi(int n,  double x)
 {
-	double		h = (b - a) / (n - 1);
-	double		h3 = h * h * h;
-	int		hi         [5] = {i - 2, i - 1, i, i + 1, i + 2};
-	double		hx      [5];
-	int		j;
-
-	for (j = 0; j < 5; j++)
-		hx[j] = a + h * hi[j];
-
-	if ((x < hx[0]) || (x > hx[4]))
-		return 0;
-	else if (x >= hx[0] && x <= hx[1])
-		return 6 / h3;
-	else if (x > hx[1] && x <= hx[2])
-		return -18 / h3;
-	else if (x > hx[2] && x <= hx[3])
-		return 18 / h3;
-	else			/* if (x > hx[3]) && (x <= hx[4]) */
-		return -6 / h3;
+	return horner(n, x, 3);
 }
 
 /* Pomocnicza f. do rysowania bazy */
-double
-xfi(double a, double b, int n, int i, FILE *out)
+double xfi(double a, double b, int n, int i, FILE *out)
 {
 	double		h = (b - a) / (n - 1);
 	double		h3 = h * h * h;
@@ -118,8 +59,7 @@ xfi(double a, double b, int n, int i, FILE *out)
 	fprintf( out, "]\n" );
 }
 
-void
-make_spl(points_t * pts, spline_t * spl)
+void make_spl(points_t * pts, spline_t * spl)
 {
 
 	matrix_t *eqs= NULL;
