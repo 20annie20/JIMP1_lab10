@@ -7,34 +7,18 @@
 
 #include <float.h>
 
-double
-fi(double a, double b, int n, int i, double x)
+
+long lag(double x, int n){
+	if(n==0)return 1;
+	if(n==1)return -1*x+1;
+	else{
+		(1/n)*((2*n-1+x)*lag(x, n-1)-n*lag(x, n-2));
+	}
+}
+
+double fi(double a, double b, int n, int i, double x)
 {
-	if(n==0) return 1;
-
-    int i = 0;
-    double ret = 0;
-
-    if(!n) return 1.0;
-    else {
-        double sum = 0;
-            for(int i = n; i > 0; i--){
-                double temp;
-                if( i % 2 == 0 ){
-                    //wykladnik parzysty
-                    temp = pow(n , 2)*pow(x, n);
-                }else{
-                    //wykladnik nieparzysty
-                    temp = -1 * pow(n , 2)*pow(x, n);
-                }
-                sum += temp;
-            }
-        int silnia = 1;
-        for(int i = 1; i <= n; i++){
-            silnia *= i;
-        }
-        return sum/silnia;
-    }
+	return lag(x, n);
 }
 
 /* Pierwsza pochodna fi */
