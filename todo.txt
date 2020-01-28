@@ -1,6 +1,0 @@
-1. zapoznać się z treścią ćwiczenia na bieżąco z przeglądem dostępnego kodu
-2. opracować teorię potrzebną do przygotowania rozwiązania
-3. ustalić zakres pracy nad kodem
-4. opracować error hhandling
-5. zaprojektować i przeprowadzić szereg testów
-6. zdać raport z zadania
